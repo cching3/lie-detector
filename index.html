@@ -4,6 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>3 Modalities &amp; 1 Lie Detector: Calibrated Deep Learning for Real-World Deception</title>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
   <style>
     :root {
       --bg: #f3f4f6;
@@ -584,9 +591,23 @@
         into M = 10 uniform bins [2, 12]. For each bin, we calculated three values: the mean predicted probability,
         conf(b); the fraction of correctly classified samples, acc(b); and the number of samples in the bin,
         n<sub>b</sub>.
-        Then our ECE was defined as:
+        Then our ECE was defined as [2]:
       </p>
-      <p>[2]</p>
+      <div style="position: relative; text-align: center; margin: 1em 0;">
+        <span style="
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        ">
+          [2]
+        </span>
+
+        $$
+        \mathrm{ECE} = \sum_{b=1}^{M} \frac{n_b}{N}
+        \left| \mathrm{acc}(b) - \mathrm{conf}(b) \right|
+        $$
+      </div>
       <p>
         A lower ECE indicates better calibration, and we visualized this through reliability diagrams, graphing conf(b)
         against acc(b) and using the identity line as a reference for perfect calibration [2].
