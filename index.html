@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>3 Modalities &amp; 1 Lie Detector: Calibrated Deep Learning for Real-World Deception</title>
@@ -85,7 +86,7 @@
       transform: translateX(1px);
     }
 
-    .toc > ul > li > a {
+    .toc>ul>li>a {
       font-weight: 600;
       color: var(--text);
     }
@@ -108,7 +109,9 @@
       overflow: hidden;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
       scroll-margin-top: 20px;
     }
 
@@ -188,7 +191,8 @@
       color: #ffffff;
     }
 
-    table th, table td {
+    table th,
+    table td {
       border: 1px solid #e5e7eb;
       padding: 6px 8px;
       text-align: left;
@@ -227,6 +231,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="layout">
     <nav class="toc">
@@ -285,22 +290,28 @@
       <h3 id="motivations">1.1 Motivations</h3>
       <p>
         Accurately predicting the truthfulness of statements is critical in legal and security settings. However, human
-        communication is inherently multimodal, manifesting not only in spoken words but also in vocal intonation, facial
+        communication is inherently multimodal, manifesting not only in spoken words but also in vocal intonation,
+        facial
         expressions, and body language, making this task challenging for automated systems. Recent advances in deep
         learning have demonstrated strong capabilities in extracting patterns from human behavior, especially when using
         transformer based language models and neural video architectures [1].
       </p>
       <p>
-        Yet, even when these models achieve accuracy, their confidence estimates are often poorly calibrated. Modern deep
-        networks are known to be overconfident, which is dangerous in high stakes settings where decisions may depend on a
+        Yet, even when these models achieve accuracy, their confidence estimates are often poorly calibrated. Modern
+        deep
+        networks are known to be overconfident, which is dangerous in high stakes settings where decisions may depend on
+        a
         model’s certainty [2]. In the domain of deception detection, this risk is amplified. An overconfident model may
-        assign high deception probabilities when evidence is ambiguous, while a well calibrated model would better reflect
+        assign high deception probabilities when evidence is ambiguous, while a well calibrated model would better
+        reflect
         underlying uncertainty.
       </p>
       <p>
-        For this reason, we argue that probability calibration, such as ECE (Expected Calibration Error) [3], is a crucial
+        For this reason, we argue that probability calibration, such as ECE (Expected Calibration Error) [3], is a
+        crucial
         component of any deception detection system intended for real world use. By explicitly evaluating and improving
-        calibration, we aim not only to improve predictive performance but also to ensure that model confidence scores are
+        calibration, we aim not only to improve predictive performance but also to ensure that model confidence scores
+        are
         trustworthy enough to support sensitive decision making in ways never before achieved.
       </p>
 
@@ -308,21 +319,26 @@
       <p>
         Despite lie detection being studied, significant challenges still remain in developing models that can integrate
         multimodal cues in a contextualized manner. Early work, such as the Box of Lies study, used Random Forests over
-        annotated features, demonstrating the promise of multimodal signals but suffering from labor intensive annotation
+        annotated features, demonstrating the promise of multimodal signals but suffering from labor intensive
+        annotation
         and limited scalability [4]. Later research automatically extracted visual, audio, and text features, but these
-        shallow machine learning classifiers failed to exploit cross modal interactions [5]. Other studies highlight useful
+        shallow machine learning classifiers failed to exploit cross modal interactions [5]. Other studies highlight
+        useful
         lexical cues but do not leverage modern representation learning [6]. More recent multimodal approaches, such as
         Ding et al.’s CNN based models, still do not incorporate audio or linguistic information, nor do they utilize
         transformer based attention mechanisms to reason over contextual dependencies [7].
       </p>
       <p>
-        Another limitation in prior literature is the lack of focus on the reliability of the predicted probabilities. For
+        Another limitation in prior literature is the lack of focus on the reliability of the predicted probabilities.
+        For
         instance, Perez Rosas et al. created a deception detector combining both verbal and non verbal modalities, but
         their evaluation was limited to standard metrics like accuracy [8]. There has also been a new MM-DeceptionBench
         introduced for deception in large vision language models, which incorporates ECE alongside accuracy and other
-        metrics, but its focus is on machine machine deception rather than human deception in videos, audios, and text [9].
+        metrics, but its focus is on machine machine deception rather than human deception in videos, audios, and text
+        [9].
         Meanwhile, deep learning research has shown that modern models are often poorly calibrated even with low
-        classification error, and methods such as temperature scaling and Platt scaling offer simple and effective post hoc
+        classification error, and methods such as temperature scaling and Platt scaling offer simple and effective post
+        hoc
         calibration techniques [10, 12]. Yet deception detection research rarely reports ECE or analyzes miscalibration,
         leaving a critical gap for high stakes applications where overconfident errors are dangerous, such as in a
         courtroom setting [3].
@@ -331,7 +347,8 @@
       <ul>
         <li>Evaluating multiple combinations of modalities and deep learning architectures.</li>
         <li>Explicitly framing deception detection as a calibrated probabilistic problem.</li>
-        <li>Performing head to head comparisons of temperature scaling and Platt scaling in single modality and multimodal fusion settings.</li>
+        <li>Performing head to head comparisons of temperature scaling and Platt scaling in single modality and
+          multimodal fusion settings.</li>
       </ul>
       <p>
         By combining multimodal deep learning with systematic calibration analysis, we connect two previously separate
@@ -341,12 +358,16 @@
 
       <h3 id="goals">1.3 Goals</h3>
       <p>
-        This project addresses these limitations by evaluating how incorporating audio, visual, and linguistic information,
+        This project addresses these limitations by evaluating how incorporating audio, visual, and linguistic
+        information,
         alongside transformer based architectures, can improve the accuracy and calibration of lie detection. Attention
         mechanisms enable the model to weigh different features, better capturing subtle cues that traditional models
-        overlook. We combine specialized architectures by training separate models on visual, audio, and transcript data,
-        and then passing their learned representations into a final classifier. This allows us to integrate complementary
-        strengths across modalities, thereby enhancing the robustness and interpretability of deception detection systems.
+        overlook. We combine specialized architectures by training separate models on visual, audio, and transcript
+        data,
+        and then passing their learned representations into a final classifier. This allows us to integrate
+        complementary
+        strengths across modalities, thereby enhancing the robustness and interpretability of deception detection
+        systems.
       </p>
 
       <h2 id="methods">2. Methods</h2>
@@ -355,12 +376,14 @@
       <p>
         To develop a deception detector grounded in high stakes, real world lying behavior, we used a multimodal dataset
         [8] collected from actual court trials. The dataset consists of 121 curated trial video clips (61 deceptive,
-        60 truthful), ranging from 20 to 50 seconds in length, featuring a single speaker’s face and high quality audio and
+        60 truthful), ranging from 20 to 50 seconds in length, featuring a single speaker’s face and high quality audio
+        and
         visuals. For every clip, we obtained a verbatim transcript of the defendant’s speech, annotated via Amazon
         Mechanical Turk.
       </p>
       <p>
-        Ground truth labels (truthful or deceptive) were derived from trial outcomes and corroborating evidence, including
+        Ground truth labels (truthful or deceptive) were derived from trial outcomes and corroborating evidence,
+        including
         guilty, not guilty, and exoneration verdicts. For instance, deceptive clips include suspects denying crimes they
         later confessed to, whereas truthful clips include suspects’ statements independently verified by police and
         confirmed testimonies from law enforcement investigations [8].
@@ -371,7 +394,8 @@
         Figure 1: Architectural diagrams for the three modality specific models: visual, transcription, and audio.
       </p>
       <p>
-        We model three modalities separately: video, text (transcripts), and audio. Then, we built multimodal architectures
+        We model three modalities separately: video, text (transcripts), and audio. Then, we built multimodal
+        architectures
         that combined these data modalities. This allows us to test whether integrating additional modalities improves
         deception predictions and compare this against unimodal model architectures.
       </p>
@@ -379,7 +403,8 @@
       <h3 id="transcriptions">2.2.1 Transcriptions</h3>
       <p><strong>Transcription Preprocessing</strong></p>
       <p>
-        We use the pretrained RoBERTa tokenizer [13] to convert each transcript directly into subword tokens, truncating or
+        We use the pretrained RoBERTa tokenizer [13] to convert each transcript directly into subword tokens, truncating
+        or
         padding sequences to a maximum length of 256 and generating attention masks to distinguish real tokens from
         padding.
       </p>
@@ -391,41 +416,56 @@
         classifier head is trained.
       </p>
       <p>
-        The second model follows the same pipeline but fine tunes the entire RoBERTa encoder using a small learning rate,
-        while the classifier head trains with a larger one. This allows the model to adapt its language representations to
+        The second model follows the same pipeline but fine tunes the entire RoBERTa encoder using a small learning
+        rate,
+        while the classifier head trains with a larger one. This allows the model to adapt its language representations
+        to
         cues specific to deception.
       </p>
       <p>
-        The fine tuned model outperforms the frozen model, likely because fine tuning allows RoBERTa to adapt its internal
+        The fine tuned model outperforms the frozen model, likely because fine tuning allows RoBERTa to adapt its
+        internal
         representations to capture subtle signals. This is especially important given our small dataset of roughly 100
         videos. With limited training data, the classifier head alone cannot learn sufficiently rich features, but full
-        fine tuning enables RoBERTa’s large pretrained knowledge to be specialized to this domain [13]. Because of this, we
+        fine tuning enables RoBERTa’s large pretrained knowledge to be specialized to this domain [13]. Because of this,
+        we
         adopt the fine tuned transcription model in our system.
       </p>
 
       <h3 id="audio">2.2.2 Audio</h3>
       <p><strong>Audio Preprocessing</strong></p>
       <p>
-        To model deception related cues in vocal patterns, we built audio classifiers that operate on the mel spectrogram
+        To model deception related cues in vocal patterns, we built audio classifiers that operate on the mel
+        spectrogram
         images produced during this preprocessing step. In order to analyze the vocal patterns, we first extracted the
-        soundtrack from each video using FFmpeg [14] and converted it to a mono waveform at 16 kHz using Librosa [15]. We
-        then processed the waveform to compute a mel spectrogram, which serves as the input to the audio classifiers. The
-        mel spectrogram was generated using a 1024 point FFT window, a 512 hop length, and 64 mel frequency bins, and then
+        soundtrack from each video using FFmpeg [14] and converted it to a mono waveform at 16 kHz using Librosa [15].
+        We
+        then processed the waveform to compute a mel spectrogram, which serves as the input to the audio classifiers.
+        The
+        mel spectrogram was generated using a 1024 point FFT window, a 512 hop length, and 64 mel frequency bins, and
+        then
         transformed into the decibel scale to enhance contrast in speech energy differences.
       </p>
       <p>
-        To make the audio compatible with our convolutional backbone, each spectrogram was rendered as a PNG and saved to
-        disk. During dataset loading, these images were resized to 224 × 224 pixels, converted into three channel tensors
-        by repeating the single grayscale channel, and normalized using ImageNet statistics [16]. This allowed us to feed
+        To make the audio compatible with our convolutional backbone, each spectrogram was rendered as a PNG and saved
+        to
+        disk. During dataset loading, these images were resized to 224 × 224 pixels, converted into three channel
+        tensors
+        by repeating the single grayscale channel, and normalized using ImageNet statistics [16]. This allowed us to
+        feed
         them directly into a pretrained ResNet18 [17].
       </p>
       <p><strong>Audio Architecture</strong></p>
       <p>
-        We developed a stronger transfer learning based architecture using a pretrained ResNet18 to analyze audio. In order
-        to use ResNet18 [17], we adapted its first convolutional layer to accept single channel spectrograms. Like before,
+        We developed a stronger transfer learning based architecture using a pretrained ResNet18 to analyze audio. In
+        order
+        to use ResNet18 [17], we adapted its first convolutional layer to accept single channel spectrograms. Like
+        before,
         to avoid overfitting, we froze most of the backbone parameters and selectively unfroze only the deeper layers
-        (Layer 3, Layer 4) along with the classification head. We then replaced ResNet18’s original fully connected layer
-        with a custom head consisting of dropout [23], a 512 unit linear layer with ReLU activation, another dropout layer,
+        (Layer 3, Layer 4) along with the classification head. We then replaced ResNet18’s original fully connected
+        layer
+        with a custom head consisting of dropout [23], a 512 unit linear layer with ReLU activation, another dropout
+        layer,
         and a final linear layer that maps to the two output logits.
       </p>
       <p>
@@ -436,11 +476,13 @@
       <h3 id="video">2.2.3 Video</h3>
       <p><strong>Video Preprocessing</strong></p>
       <p>
-        For the video modality, we uniformly sampled 20 frames from each clip and resized them to 224 × 224 pixels. Frames
+        For the video modality, we uniformly sampled 20 frames from each clip and resized them to 224 × 224 pixels.
+        Frames
         were converted to a 3 channel RGB and normalized using the standard ImageNet [16] mean and standard deviation,
         matching the distribution expected by the pretrained CNN. Features were then extracted from each frame using a
         pretrained ResNet18 [17], which helped the model identify generic visual patterns such as edges, textures, and
-        shapes. From there, we performed global average pooling to turn each frame into a 512 dimensional feature vector.
+        shapes. From there, we performed global average pooling to turn each frame into a 512 dimensional feature
+        vector.
       </p>
       <p><strong>Video Architecture</strong></p>
       <p>
@@ -450,9 +492,11 @@
       <p><em>RNN</em></p>
       <p>
         For the RNN architecture, the video representations were fed into a bidirectional GRU [18, 19], which can model
-        temporal dynamics in facial expressions, posture, and gaze [20, 21]. The bidirectional structure also allows each
+        temporal dynamics in facial expressions, posture, and gaze [20, 21]. The bidirectional structure also allows
+        each
         frame to be informed by both past and future context, which is essential, since cues for lying often emerge from
-        sequences of frames of micro expressions rather than isolated frames [18, 19]. Then, in the final layer of the GRU,
+        sequences of frames of micro expressions rather than isolated frames [18, 19]. Then, in the final layer of the
+        GRU,
         the forward and backward hidden states are concatenated into a 256 dimensional representation. This output is
         passed to a classification head that outputs two logits (deceptive or truthful), which are converted to class
         probabilities via softmax.
@@ -460,10 +504,13 @@
       <p><em>Transformer</em></p>
       <p>
         For the transformer architecture, the video representations were first transformed into suitable tokens by
-        projecting each 512 dimensional frame feature into a 256 dimensional vector and adding positional encoding to make
+        projecting each 512 dimensional frame feature into a 256 dimensional vector and adding positional encoding to
+        make
         the model time aware of frame ordering. The core of the transformer model is a stack of two transformer encoder
-        layers. In each layer, tokens pass through a multi head self attention sublayer with four attention heads, followed
-        by a two layer feedforward network, with residual connections and normalization around both sublayers. From there,
+        layers. In each layer, tokens pass through a multi head self attention sublayer with four attention heads,
+        followed
+        by a two layer feedforward network, with residual connections and normalization around both sublayers. From
+        there,
         masked mean pooling is applied to compress the encoder's sequence of token embeddings into a 256 dimensional
         representation, which is then passed through a classification head to produce logits, and via softmax, class
         probabilities.
@@ -476,22 +523,28 @@
       </p>
       <p>
         To leverage information from audios, transcriptions, and videos, we developed a multimodal fusion model that
-        integrates features from all three separately trained encoders. Rather than simply concatenating unimodal logits or
+        integrates features from all three separately trained encoders. Rather than simply concatenating unimodal logits
+        or
         embeddings, we employ a learned gated fusion mechanism that dynamically determines how much each modality should
         contribute to the final prediction of each sample [22].
       </p>
       <p>
         Each encoder first produces a fixed dimensional embedding. The video encoder outputs a 512 dimensional
         representation of frame level features, the audio encoder outputs a 512 dimensional representation from
-        mel spectrogram inputs, and the text encoder outputs a 768 dimensional RoBERTa embedding [13], which we project to
-        512 dimensions for consistency. All embeddings are layer normalized and contained, then passed into a small gating
-        network that outputs three modality specific scalar gates. After a sigmoid activation, these gates range from 0 to 1
-        and modulate the contribution of each modality by element wise scaling its embedding, allowing the model to decide
+        mel spectrogram inputs, and the text encoder outputs a 768 dimensional RoBERTa embedding [13], which we project
+        to
+        512 dimensions for consistency. All embeddings are layer normalized and contained, then passed into a small
+        gating
+        network that outputs three modality specific scalar gates. After a sigmoid activation, these gates range from 0
+        to 1
+        and modulate the contribution of each modality by element wise scaling its embedding, allowing the model to
+        decide
         how much to weigh each modality on a per sample basis. For example, when it believes the audio input is most
         informative, it will increase the weight corresponding to audio.
       </p>
       <p>
-        The gated and scaled embeddings are concatenated to form a unified multimodal representation, which is processed by
+        The gated and scaled embeddings are concatenated to form a unified multimodal representation, which is processed
+        by
         a lightweight MLP consisting of a linear projection to 128 dimensions, a ReLU activation, dropout for
         regularization [23], and a final linear layer that outputs a single logit corresponding to the deception
         probability. By learning both modality specific gates and a joint classifier, the model captures interactions
@@ -500,13 +553,15 @@
 
       <h3 id="video-transcription">2.2.5 Video and Transcription</h3>
       <p>
-        Figure 3: Architectural diagram of the bimodal model which integrates embeddings from the video and transcription
+        Figure 3: Architectural diagram of the bimodal model which integrates embeddings from the video and
+        transcription
         encoders.
       </p>
       <p>
         Finally, guided by the results of previous models, we also created a bimodal model using video and text
         transcription modalities. Here, we combined the best performing video architecture with the best performing text
-        transcription architecture. Each data modality model’s architecture was combined by concatenating its logits (each
+        transcription architecture. Each data modality model’s architecture was combined by concatenating its logits
+        (each
         256 dimensional) and feeding the result to a small MLP head. The MLP classifier consists, in order, of a fully
         connected layer with 512 units, a ReLU, a dropout layer [23], and a fully connected layer that maps 512 units to
         2 logits (deceptive vs truthful).
@@ -519,12 +574,16 @@
         evaluations.
       </p>
       <p>
-        In addition to standard performance metrics like accuracy, AUC, and F1 score, we also evaluated model calibration
+        In addition to standard performance metrics like accuracy, AUC, and F1 score, we also evaluated model
+        calibration
         using the Expected Calibration Error (ECE) [2, 12]. While metrics like accuracy and F1 score are standard for
-        performance, ECE can measure our models’ trustworthiness, which is especially critical in this domain of deception
-        detection [2, 12]. ECE measures the gap between confidence and accuracy by partitioning the predicted probabilities
+        performance, ECE can measure our models’ trustworthiness, which is especially critical in this domain of
+        deception
+        detection [2, 12]. ECE measures the gap between confidence and accuracy by partitioning the predicted
+        probabilities
         into M = 10 uniform bins [2, 12]. For each bin, we calculated three values: the mean predicted probability,
-        conf(b); the fraction of correctly classified samples, acc(b); and the number of samples in the bin, n<sub>b</sub>.
+        conf(b); the fraction of correctly classified samples, acc(b); and the number of samples in the bin,
+        n<sub>b</sub>.
         Then our ECE was defined as:
       </p>
       <p>[2]</p>
@@ -533,13 +592,19 @@
         against acc(b) and using the identity line as a reference for perfect calibration [2].
       </p>
       <p>
-        To improve calibration, we applied two post hoc techniques with the model weights frozen: temperature scaling and
-        Platt scaling [2, 10]. Temperature scaling rescales the logits by a single learned parameter T, which is optimized
-        on a held out calibration split by minimizing cross entropy [2]. Platt scaling fits a logistic regression model on
-        the scalar score difference between classes [10]. To do this, we collapsed the logits from our models’ predictions
-        for the two classes into a scalar s = z<sub>1</sub> − z<sub>0</sub>. The goal of the logistic regression model was
+        To improve calibration, we applied two post hoc techniques with the model weights frozen: temperature scaling
+        and
+        Platt scaling [2, 10]. Temperature scaling rescales the logits by a single learned parameter T, which is
+        optimized
+        on a held out calibration split by minimizing cross entropy [2]. Platt scaling fits a logistic regression model
+        on
+        the scalar score difference between classes [10]. To do this, we collapsed the logits from our models’
+        predictions
+        for the two classes into a scalar s = z<sub>1</sub> − z<sub>0</sub>. The goal of the logistic regression model
+        was
         to learn two parameters, A and B, by minimizing binary cross entropy loss [10]. By having two parameters, Platt
-        scoring offers a more flexible correction and can fit more complex miscalibration patterns than a single parameter
+        scoring offers a more flexible correction and can fit more complex miscalibration patterns than a single
+        parameter
         temperature scaling [10].
       </p>
 
@@ -548,11 +613,15 @@
       <h3 id="unimodal-models">3.1 Unimodal Models</h3>
       <p><strong>Transcriptions</strong></p>
       <p>
-        The fine tuned RoBERTa model performed substantially better than the frozen version, achieving a mean CV accuracy
+        The fine tuned RoBERTa model performed substantially better than the frozen version, achieving a mean CV
+        accuracy
         of 0.698 (SD = 0.090) compared to only 0.479 (SD = 0.011). This significant performance gap highlights the
-        importance of domain adaptation [25], as allowing the encoder to reshape its representations to courtroom specific
-        linguistic cues nearly doubled the accuracy. The frozen model performed at random chance levels across all folds.
-        In contrast, the fine tuned model showed substantial improvements, despite being highly prone to overfitting due to
+        importance of domain adaptation [25], as allowing the encoder to reshape its representations to courtroom
+        specific
+        linguistic cues nearly doubled the accuracy. The frozen model performed at random chance levels across all
+        folds.
+        In contrast, the fine tuned model showed substantial improvements, despite being highly prone to overfitting due
+        to
         the small dataset size and RoBERTa’s 125 million parameters [13]. This underscores that even limited fine tuning
         [26] enables RoBERTa to capture domain specific patterns that static embeddings cannot.
       </p>
@@ -560,10 +629,13 @@
       <p>
         The best performing architecture for audio was the ResNet18 transfer learning model applied to mel spectrogram
         images, achieving a mean accuracy of 0.690 (SD = 0.059). This indicates that vocal sounds may provide meaningful
-        cues for deception, even when analyzed independently of facial or linguistic content. The ResNet18 model performed
+        cues for deception, even when analyzed independently of facial or linguistic content. The ResNet18 model
+        performed
         consistently across folds and achieved good accuracy, suggesting that the pretrained backbone was better able to
-        capture subtle spectral patterns associated with hesitations, stress, pitch shifts, and energy distribution. This
-        is likely due to the higher variability and noise in courtroom audio recordings, as well as the many factors that
+        capture subtle spectral patterns associated with hesitations, stress, pitch shifts, and energy distribution.
+        This
+        is likely due to the higher variability and noise in courtroom audio recordings, as well as the many factors
+        that
         affect the conversion of an audio signal to a spectrogram. Variability across folds also suggests sensitivity to
         the small dataset size, despite attempts to regularize via layer freezing and dropout.
       </p>
@@ -572,29 +644,37 @@
         The transformer model performed better than the RNN, achieving a CV accuracy of 0.729 (SD = 0.089) compared to
         0.699 (SD = 0.071). However, the difference was modest, and there is overlap in fold level variability. The
         transformer’s slight advantage likely stems from its ability to examine relationships between distance frames
-        through self attention [27]. In contrast, the RNN must carry this information sequentially, which means early frame
+        through self attention [27]. In contrast, the RNN must carry this information sequentially, which means early
+        frame
         information can become diluted at later time steps [28].
       </p>
       <p><strong>Overall Unimodal Conclusions</strong></p>
       <p>
-        Across all three unimodal models (transcript, audio, and video), we find that each modality independently carries
+        Across all three unimodal models (transcript, audio, and video), we find that each modality independently
+        carries
         cues for deception, but their predictive strengths differ considerably. Video provided the highest unimodal
-        performance at 0.729, followed by transcript data at 0.698, and audio at 0.690. The unimodal results show that text
-        and video are the strongest predictors individually, while audio is a moderate but meaningful complementary signal.
-        This difference in predictive strength validates the approach of combining their complementary information through
+        performance at 0.729, followed by transcript data at 0.698, and audio at 0.690. The unimodal results show that
+        text
+        and video are the strongest predictors individually, while audio is a moderate but meaningful complementary
+        signal.
+        This difference in predictive strength validates the approach of combining their complementary information
+        through
         multimodal fusion [29].
       </p>
 
       <h3 id="multimodal-models">3.2 Multimodal Models</h3>
       <p>
         Because our audio model performed worse than the others, we decided to run two multimodal models: one using all
-        three modalities and another using just transcript and video. We found the bimodal model performed better than the
-        trimodal model. This likely occurs because adding the audio component significantly increases the number of model
+        three modalities and another using just transcript and video. We found the bimodal model performed better than
+        the
+        trimodal model. This likely occurs because adding the audio component significantly increases the number of
+        model
         parameters, thereby promoting overfitting.
       </p>
 
       <table>
-        <caption>Table 1. Cross validation accuracy of individual modality models and multimodal fusion models. Results are reported as mean accuracy with standard deviation across folds.</caption>
+        <caption>Table 1. Cross validation accuracy of individual modality models and multimodal fusion models. Results
+          are reported as mean accuracy with standard deviation across folds.</caption>
         <thead>
           <tr>
             <th>Method</th>
@@ -635,7 +715,8 @@
 
       <h3 id="ece">3.3 Expected Calibration Error (ECE)</h3>
       <p>
-        ECE scores were computed for our top two models: the unimodal video transformer and the bimodal transcription and
+        ECE scores were computed for our top two models: the unimodal video transformer and the bimodal transcription
+        and
         video model. As shown in Table 2, on the held out test set, the video transformer achieved higher accuracy
         (0.80 vs 0.76), with an AUC of 0.846 and an F1 score of 0.783. The model also had a raw ECE of 0.2255, which was
         temperature scaled to be 0.2352 and Platt scaled to be 0.1445. In comparison, the bimodal model yields a better
@@ -644,13 +725,15 @@
         model also achieved a slightly higher AUC of 0.853, despite having lower accuracy.
       </p>
       <p>
-        Figure 4: Reliability plots for the video model (top row) and the bimodal video transcription model (bottom row).
+        Figure 4: Reliability plots for the video model (top row) and the bimodal video transcription model (bottom
+        row).
         Each row shows the uncalibrated model, temperature scaled model, and Platt scaled model, along with the
         corresponding ECE.
       </p>
 
       <table>
-        <caption>Table 2. Performance comparison of the Video Transformer model and the combined Transcription plus Video model across multiple metrics.</caption>
+        <caption>Table 2. Performance comparison of the Video Transformer model and the combined Transcription plus
+          Video model across multiple metrics.</caption>
         <thead>
           <tr>
             <th>Method</th>
@@ -685,16 +768,21 @@
       </table>
 
       <p>
-        Another additional consideration is examining the confidence distributions. The video transformer’s predictions are
-        clustered around 0.5, showing high uncertainty across most samples. In contrast, the bimodal model showed a bimodal
+        Another additional consideration is examining the confidence distributions. The video transformer’s predictions
+        are
+        clustered around 0.5, showing high uncertainty across most samples. In contrast, the bimodal model showed a
+        bimodal
         distribution, indicating that it makes more decisive predictions. This demonstrates that the model separated the
         classes more clearly, but also made more confident errors. This presents an essential trade off for real world
-        settings. While the bimodal model has better calibration metrics and lower ECE, its confident incorrect predictions
-        may be more problematic in high stakes legal settings where uncertainty should be acknowledged rather than masked
+        settings. While the bimodal model has better calibration metrics and lower ECE, its confident incorrect
+        predictions
+        may be more problematic in high stakes legal settings where uncertainty should be acknowledged rather than
+        masked
         by false confidence.
       </p>
       <p>
-        Figure 5: Histograms of predicted confidences for the Video Transformer model and the combined Transcription plus
+        Figure 5: Histograms of predicted confidences for the Video Transformer model and the combined Transcription
+        plus
         Video model.
       </p>
 
@@ -708,12 +796,14 @@
       </p>
       <p>
         However, despite these strengths, the dataset remains narrowly scoped. All 121 clips are gathered from similar
-        English speaking courtrooms [8]. As such, these models may not generalize to conversations in different languages,
+        English speaking courtrooms [8]. As such, these models may not generalize to conversations in different
+        languages,
         cultures, or contexts, such as police interviews or everyday dialogue.
       </p>
       <p>
         A further limitation is the definition of ground truth. Although the clips come from real trials, the deception
-        labels are inferred from case outcomes and corroborating evidence rather than from direct verification of what the
+        labels are inferred from case outcomes and corroborating evidence rather than from direct verification of what
+        the
         speaker said in the specific clip. This introduces several risks. A verdict may not perfectly correspond to the
         truthfulness of a particular statement. Some statements may be partially truthful, strategically incomplete, or
         socially motivated “white lies,” none of which map cleanly onto binary truth/false labels. Moreover, structural
@@ -722,8 +812,10 @@
         reproduce those biases [30].
       </p>
       <p>
-        Because the dataset is small, our models, especially large architectures such as RoBERTa and the transformer based
-        video encoder, are prone to overfitting [25]. Fine tuning improves accuracy but also increases the risk that models
+        Because the dataset is small, our models, especially large architectures such as RoBERTa and the transformer
+        based
+        video encoder, are prone to overfitting [25]. Fine tuning improves accuracy but also increases the risk that
+        models
         memorize the specific individuals and courtroom context rather than learning generalizable deception cues.
         Calibration estimates may also be unstable due to limited sample size [2]. Finally, each modality encoder in our
         work is trained largely in isolation before fusion, which may restrict the model’s ability to learn cross modal
@@ -733,202 +825,316 @@
       <h3 id="implications">4.2 Implications</h3>
       <p>
         First, the improved performance of the unfrozen RoBERTa model over the frozen RoBERTa model demonstrates the
-        importance of incorporating domain adaptation into language encoders [26]. Even though RoBERTa is pretrained on a
+        importance of incorporating domain adaptation into language encoders [26]. Even though RoBERTa is pretrained on
+        a
         vast corpus of English text, including BookCorpus and Wikipedia [13], its representations are not a good fit for
         the language in trial transcripts, which can be highly specific and sometimes emotionally charged. Allowing the
-        encoder to update its weights on this specific task of trial data text almost doubled the CV accuracy from 0.479 to
+        encoder to update its weights on this specific task of trial data text almost doubled the CV accuracy from 0.479
+        to
         0.678, underscoring the importance of end to end fine tuning for language based deception detection.
       </p>
       <p>
-        Furthermore, the transformer’s improved performance over the RNN model underscores the importance of architectural
+        Furthermore, the transformer’s improved performance over the RNN model underscores the importance of
+        architectural
         choices for encoding temporal information [27]. The transformer yielded slightly higher CV accuracy than the GRU
-        based RNN, which is consistent with the idea that incorporating attention heads with a transformer allows the model
-        to capture longer range dependencies from different frames of a video, which provides for common lying behaviors,
+        based RNN, which is consistent with the idea that incorporating attention heads with a transformer allows the
+        model
+        to capture longer range dependencies from different frames of a video, which provides for common lying
+        behaviors,
         like changes in facial expressions or repeating physical movement quirks, to be picked up on [27]. However, the
-        gain is also relatively modest, with overlapping variability, suggesting that we cannot guarantee that going from
+        gain is also relatively modest, with overlapping variability, suggesting that we cannot guarantee that going
+        from
         an RNN to a transformer alone will cause a significant improvement. This demonstrates that when computation
-        resources are limited, a well tuned RNN model can serve as a reasonable baseline, whereas transformers are preferred
+        resources are limited, a well tuned RNN model can serve as a reasonable baseline, whereas transformers are
+        preferred
         when resources are more readily available [31].
       </p>
       <p>
-        Additionally, across the various multimodal experiments we conducted, we found that incorporating more modalities
-        does not inherently improve the model [29]. In fact, using only two of the modalities (transcription and video) is
+        Additionally, across the various multimodal experiments we conducted, we found that incorporating more
+        modalities
+        does not inherently improve the model [29]. In fact, using only two of the modalities (transcription and video)
+        is
         better than the three modality model (transcription, video, and audio), likely because the added spectrogram CNN
-        increases the model’s parameters and converting audio to spectrograms can add a lot of additional noise and bias,
+        increases the model’s parameters and converting audio to spectrograms can add a lot of additional noise and
+        bias,
         especially if the audio quality is variable across clips.
       </p>
       <p>
-        For real world applications, the calibration analysis provides promising work. The video transformer achieved the
+        For real world applications, the calibration analysis provides promising work. The video transformer achieved
+        the
         highest test accuracy on the held out dataset, but it is also less well calibrated than the transcription plus
         video fusion model. However, examining the models’ probabilities, which yield an almost bimodal distribution,
-        reveals that the transcription plus video model has quite confident predictions, which, in a legal setting, may be
-        less preferred than slightly lower accuracy [2]. These results show that examining multiple aspects of a model is
+        reveals that the transcription plus video model has quite confident predictions, which, in a legal setting, may
+        be
+        less preferred than slightly lower accuracy [2]. These results show that examining multiple aspects of a model
+        is
         important when evaluating how well it performs in the context you want it to perform in.
       </p>
 
       <h3 id="future-work">4.3 Future Work</h3>
       <p>
-        This project demonstrates the value of multimodal analysis for real world lie detection, but improving robustness
-        will require training models jointly across modalities rather than independently [29]. Future work should consider
-        co training or contrastive multimodal learning to capture better interactions among audio, visual, and linguistic
+        This project demonstrates the value of multimodal analysis for real world lie detection, but improving
+        robustness
+        will require training models jointly across modalities rather than independently [29]. Future work should
+        consider
+        co training or contrastive multimodal learning to capture better interactions among audio, visual, and
+        linguistic
         cues.
       </p>
       <p>
-        Given the limitations of our dataset, future systems should also prioritize greater data diversity and incorporate
+        Given the limitations of our dataset, future systems should also prioritize greater data diversity and
+        incorporate
         debiasing methods to prevent models from learning irrelevant correlations [30]. Evaluations should explicitly
-        measure fairness across gender, race, age, and other attributes, which is critical before these models are deployed
+        measure fairness across gender, race, age, and other attributes, which is critical before these models are
+        deployed
         in real world decision making contexts.
       </p>
 
       <h2 id="references">5. References</h2>
-      <p>
-        Zhang, Xiuliang, et al. “<em>A Framework Combining 3D CNN and Transformer for Video Based Behavior Recognition.</em>”
-        <em>arXiv</em>, 2025, (arxiv.org/abs/2508.06528).
-      </p>
-      <p>
-        Guo, Chuan, et al. “<em>On Calibration of Modern Neural Networks.</em>”
-        <em>Proceedings of the 34th International Conference on Machine Learning</em>, PMLR, vol. 70, 2017, pp. 1321–1330.
-        https://proceedings.mlr.press/v70/guo17a.html
-      </p>
-      <p>
-        Guo, Xiaobao, et al. <em>Audio Visual Deception Detection: DOLOS Dataset and Parameter Efficient Crossmodal Learning.</em>
-        arXiv:2303.12745, 2023, https://arxiv.org/abs/2303.12745
-      </p>
-      <p>
-        Fonseca, Erick, et al. “<em>Findings of the WMT 2019 Shared Tasks on Quality Estimation.</em>”
-        <em>Proceedings of the Fourth Conference on Machine Translation (Volume 3: Shared Task Papers, Day 2)</em>,
-        Association for Computational Linguistics, 2019, pp. 1–10. https://aclanthology.org/W19-5401/.
-      </p>
-      <p>
-        Zhang, Jiajie, Sarah Ita Levitan, and Julia Hirschberg. “<em>Multimodal Deception Detection Using Automatically
-        Extracted Acoustic, Visual, and Lexical Features.</em>” <em>Interspeech 2020</em>, 2020, pp. 359–363.
-        doi:10.21437/Interspeech.2020-2320. https://www.isca-archive.org/interspeech_2020/zhang20c_interspeech.html.
-      </p>
-      <p>
-        Levitan, Sarah Ita, Angel Maredia, and Julia Hirschberg. “<em>Linguistic Cues to Deception and Perceived Deception
-        in Interview Dialogues.</em>” <em>Proceedings of the 2018 Conference of the North American Chapter of the Association
-        for Computational Linguistics: Human Language Technologies</em>, vol. 1, 2018, pp. 1941–1950.
-        https://aclanthology.org/N18-1176/.
-      </p>
-      <p>
-        Ding, Miao, et al. “<em>Face Focused Cross Stream Network for Deception Detection in Videos.</em>”
-        <em>2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, IEEE, 2019, pp. 7794–7803,
-        https://doi.org/10.1109/CVPR.2019.00799.
-      </p>
-      <p>
-        Pérez Rosas, Verónica, et al. “<em>Deception Detection Using Real life Trial Data.</em>”
-        <em>Proceedings of the 2015 ACM International Conference on Multimodal Interaction</em>, 2015, pp. 59–66,
-        https://doi.org/10.1145/2818346.2820758.
-      </p>
-      <p>
-        Fang, Sitong, et al. “<em>Debate with Images: Detecting Deceptive Behaviors in Multimodal Large Language Models.</em>”
-        <em>arXiv</em>, 2025, https://arxiv.org/abs/2512.00349.
-      </p>
-      <p>
-        Platt, John. “<em>Probabilities for SV Machines.</em>” <em>Advances in Large Margin Classifiers</em>, edited by
-        Alexander J. Smola et al., MIT Press, 1999, pp. 61–74.
-        https://www.researchgate.net/publication/233784966_Probabilities_for_SV_Machines.
-      </p>
-      <p>
-        Hsiao, Shun Wen, and Chengbin Sun. “<em>LoRA like Calibration for Multimodal Deception Detection Using ATSFace Data.</em>”
-        <em>2023 IEEE International Conference on Big Data (BigData)</em>, 2023, pp. 2163–2172.
-        https://www.semanticscholar.org/paper/LoRA-like-Calibration-for-Multimodal-Deception-Data-Hsiao-Sun/cdc5ec587e025d2e0eaf4a682334d3d3f72f961c.
-      </p>
-      <p>
-        Pakdaman Naeini, Mahdi, Gregory Cooper, and Milos Hauskrecht. “<em>Obtaining Well Calibrated Probabilities Using
-        Bayesian Binning.</em>” <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>, vol. 29, no. 1, 2015.
-        https://doi.org/10.1609/aaai.v29i1.9602.
-      </p>
-      <p>
-        Liu, Yinhan, et al. “<em>RoBERTa: A Robustly Optimized BERT Pretraining Approach.</em>” <em>arXiv</em>, version 1,
-        26 July 2019, https://doi.org/10.48550/arXiv.1907.11692.
-      </p>
-      <p>
-        Kia, Siang Hock, and Lingxia Li. “<em>Automated Processing of Massive Audio/Video Content Using FFmpeg.</em>”
-        <em>The Code4Lib Journal</em>, no. 23, 17 Jan. 2014, https://journal.code4lib.org/articles/9128.
-      </p>
-      <p>
-        Suman, S., et al. “<em>Visualization of Audio Files Using Librosa.</em>”
-        <em>Proceedings of the 2nd International Conference on Mathematical Modeling and Computational Science</em>, edited
-        by S. L. Peng, C. K. Lin, and S. Pal, vol. 1422, Springer, 2022.
-        https://doi.org/10.1007/978-981-19-0182-9_41.
-      </p>
-      <p>
-        Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton. “<em>ImageNet Classification with Deep Convolutional Neural
-        Networks.</em>” <em>Advances in Neural Information Processing Systems</em>, vol. 25, 2012, pp. 1106–1114.
-      </p>
-      <p>
-        He, Kaiming, et al. “<em>Deep Residual Learning for Image Recognition.</em>” <em>arXiv</em>, 2015,
-        arxiv.org/abs/1512.03385.
-      </p>
-      <p>
-        Cho, Kyunghyun, et al. “<em>Learning Phrase Representations Using RNN Encoder Decoder for Statistical Machine
-        Translation.</em>” <em>arXiv</em>, 2014, arxiv.org/abs/1406.1078.
-      </p>
-      <p>
-        Schuster, M., and K. K. Paliwal. “<em>Bidirectional Recurrent Neural Networks.</em>”
-        <em>IEEE Transactions on Signal Processing</em>, vol. 45, no. 11, 1997, pp. 2673–2681.
-        https://ieeexplore.ieee.org/document/650093/citations#citations.
-      </p>
-      <p>
-        Zeng, Zhihong, Maja Pantic, and Glenn Roisman. “<em>A Survey of Affect Recognition Methods: Audio, Visual, and
-        Spontaneous Expressions.</em>” <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, vol. 31,
-        2009, pp. 39–58.
-      </p>
-      <p>
-        Malmberg, F. <em>Gaze Tracking Using Recurrent Neural Networks: Hardware Agnostic Gaze Estimation Using Temporal
-        Features, Synthetic Data, and a Geometric Model.</em> 2022. Dissertation.
-        https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-323149.
-      </p>
-      <p>
-        Arevalo, John, et al. “<em>Gated Multimodal Units for Information Fusion.</em>” <em>arXiv</em>, 2017,
-        arxiv.org/abs/1702.01992.
-      </p>
-      <p>
-        Srivastava, Nitish, et al. “<em>Dropout: A Simple Way to Prevent Neural Networks from Overfitting.</em>”
-        <em>Journal of Machine Learning Research</em>, vol. 15, no. 56, 2014, pp. 1929–1958.
-        https://jmlr.org/papers/v15/srivastava14a.html.
-      </p>
-      <p>
-        Jung, Y. “<em>Multiple Predicting K Fold Cross Validation for Model Selection.</em>”
-        <em>Journal of Nonparametric Statistics</em>, vol. 30, no. 1, 2018, pp. 197–215.
-        https://doi.org/10.1080/10485252.2017.1404598.
-      </p>
-      <p>
-        Howard, Jeremy, and Sebastian Ruder. “<em>Universal Language Model Fine Tuning for Text Classification.</em>”
-        <em>Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)</em>,
-        edited by Iryna Gurevych and Yusuke Miyao, Association for Computational Linguistics, 2018, pp. 328–339. Melbourne,
-        Australia. https://doi.org/10.18653/v1/P18-1031.
-      </p>
-      <p>
-        Gururangan, Suchin, et al. “<em>Do not Stop Pretraining: Adapt Language Models to Domains and Tasks.</em>”
-        <em>Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics</em>, edited by Dan
-        Jurafsky et al., Association for Computational Linguistics, 2020, pp. 8342–8360. Online.
-        https://doi.org/10.18653/v1/2020.acl-main.740.
-      </p>
-      <p>
-        Vaswani, Ashish, et al. “<em>Attention Is All You Need.</em>” <em>arXiv</em>, 2017,
-        https://doi.org/10.48550/arXiv.1706.03762.
-      </p>
-      <p>
-        Bengio, Yoshua, Patrice Simard, and Paolo Frasconi. “<em>Learning Long Term Dependencies with Gradient Descent Is
-        Difficult.</em>” <em>IEEE Transactions on Neural Networks</em>, vol. 5, no. 2, 1994, pp. 157–166.
-        https://doi.org/10.1109/72.279181.
-      </p>
-      <p>
-        Baltrušaitis, T., C. Ahuja, and L. P. Morency. “<em>Multimodal Machine Learning: A Survey and Taxonomy.</em>”
-        <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, vol. 41, no. 2, 2019, pp. 423–443.
-        https://doi.org/10.1109/TPAMI.2018.2798607.
-      </p>
-      <p>
-        Mehrabi, Ninareh, et al. “<em>A Survey on Bias and Fairness in Machine Learning.</em>”
-        <em>ACM Computing Surveys</em>, vol. 54, no. 6, 2021, Article 115, https://doi.org/10.1145/3457607.
-      </p>
-      <p>
-        Tay, Yi, et al. “<em>Efficient Transformers: A Survey.</em>” <em>ACM Computing Surveys</em>, vol. 55, no. 6, 2022,
-        Article 109, pp. 1–28, https://doi.org/10.1145/3530811.
-      </p>
+      <ol class="references">
+        <li>
+          Zhang, Xiuliang, et al.
+          “<cite>A Framework Combining 3D CNN and Transformer for Video Based Behavior Recognition.</cite>”
+          <em>arXiv</em>, 2025.
+          <a href="https://arxiv.org/abs/2508.06528">https://arxiv.org/abs/2508.06528</a>.
+        </li>
+
+        <li>
+          Guo, Chuan, et al.
+          “<cite>On Calibration of Modern Neural Networks.</cite>”
+          <em>Proceedings of the 34th International Conference on Machine Learning</em>, PMLR, vol. 70, 2017,
+          pp. 1321–1330.
+          <a href="https://proceedings.mlr.press/v70/guo17a.html">https://proceedings.mlr.press/v70/guo17a.html</a>.
+        </li>
+
+        <li>
+          Guo, Xiaobao, et al.
+          “<cite>Audio Visual Deception Detection: DOLOS Dataset and Parameter Efficient Crossmodal Learning.</cite>”
+          <em>arXiv</em>, 2023.
+          <a href="https://arxiv.org/abs/2303.12745">https://arxiv.org/abs/2303.12745</a>.
+        </li>
+
+        <li>
+          Fonseca, Erick, et al.
+          “<cite>Findings of the WMT 2019 Shared Tasks on Quality Estimation.</cite>”
+          <em>Proceedings of the Fourth Conference on Machine Translation (Volume 3: Shared Task Papers, Day 2)</em>,
+          Association for Computational Linguistics, 2019, pp. 1–10.
+          <a href="https://aclanthology.org/W19-5401/">https://aclanthology.org/W19-5401/</a>.
+        </li>
+
+        <li>
+          Zhang, Jiajie, Sarah Ita Levitan, and Julia Hirschberg.
+          “<cite>Multimodal Deception Detection Using Automatically Extracted Acoustic, Visual, and Lexical
+            Features.</cite>”
+          <em>Interspeech 2020</em>, 2020, pp. 359–363.
+          doi:10.21437/Interspeech.2020-2320.
+          <a href="https://www.isca-archive.org/interspeech_2020/zhang20c_interspeech.html">
+            https://www.isca-archive.org/interspeech_2020/zhang20c_interspeech.html
+          </a>.
+        </li>
+
+        <li>
+          Levitan, Sarah Ita, Angel Maredia, and Julia Hirschberg.
+          “<cite>Linguistic Cues to Deception and Perceived Deception in Interview Dialogues.</cite>”
+          <em>Proceedings of the 2018 Conference of the North American Chapter of the Association
+            for Computational Linguistics: Human Language Technologies</em>, vol. 1, 2018, pp. 1941–1950.
+          <a href="https://aclanthology.org/N18-1176/">https://aclanthology.org/N18-1176/</a>.
+        </li>
+
+        <li>
+          Ding, Miao, et al.
+          “<cite>Face Focused Cross Stream Network for Deception Detection in Videos.</cite>”
+          <em>2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, IEEE, 2019,
+          pp. 7794–7803.
+          <a href="https://doi.org/10.1109/CVPR.2019.00799">https://doi.org/10.1109/CVPR.2019.00799</a>.
+        </li>
+
+        <li>
+          Pérez Rosas, Verónica, et al.
+          “<cite>Deception Detection Using Real life Trial Data.</cite>”
+          <em>Proceedings of the 2015 ACM International Conference on Multimodal Interaction</em>, 2015, pp. 59–66.
+          <a href="https://doi.org/10.1145/2818346.2820758">https://doi.org/10.1145/2818346.2820758</a>.
+        </li>
+
+        <li>
+          Fang, Sitong, et al.
+          “<cite>Debate with Images: Detecting Deceptive Behaviors in Multimodal Large Language Models.</cite>”
+          <em>arXiv</em>, 2025.
+          <a href="https://arxiv.org/abs/2512.00349">https://arxiv.org/abs/2512.00349</a>.
+        </li>
+
+        <li>
+          Platt, John.
+          “<cite>Probabilities for SV Machines.</cite>”
+          <em>Advances in Large Margin Classifiers</em>, edited by Alexander J. Smola et al., MIT Press, 1999,
+          pp. 61–74.
+          <a href="https://www.researchgate.net/publication/233784966_Probabilities_for_SV_Machines">
+            https://www.researchgate.net/publication/233784966_Probabilities_for_SV_Machines
+          </a>.
+        </li>
+
+        <li>
+          Hsiao, Shun Wen, and Chengbin Sun.
+          “<cite>LoRA like Calibration for Multimodal Deception Detection Using ATSFace Data.</cite>”
+          <em>2023 IEEE International Conference on Big Data (BigData)</em>, 2023, pp. 2163–2172.
+          <a
+            href="https://www.semanticscholar.org/paper/LoRA-like-Calibration-for-Multimodal-Deception-Data-Hsiao-Sun/cdc5ec587e025d2e0eaf4a682334d3d3f72f961c">
+            https://www.semanticscholar.org/paper/LoRA-like-Calibration-for-Multimodal-Deception-Data-Hsiao-Sun/…
+          </a>.
+        </li>
+
+        <li>
+          Pakdaman Naeini, Mahdi, Gregory Cooper, and Milos Hauskrecht.
+          “<cite>Obtaining Well Calibrated Probabilities Using Bayesian Binning.</cite>”
+          <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>, vol. 29, no. 1, 2015.
+          <a href="https://doi.org/10.1609/aaai.v29i1.9602">https://doi.org/10.1609/aaai.v29i1.9602</a>.
+        </li>
+
+        <li>
+          Liu, Yinhan, et al.
+          “<cite>RoBERTa: A Robustly Optimized BERT Pretraining Approach.</cite>”
+          <em>arXiv</em>, version 1, 26 July 2019.
+          <a href="https://doi.org/10.48550/arXiv.1907.11692">https://doi.org/10.48550/arXiv.1907.11692</a>.
+        </li>
+
+        <li>
+          Kia, Siang Hock, and Lingxia Li.
+          “<cite>Automated Processing of Massive Audio/Video Content Using FFmpeg.</cite>”
+          <em>The Code4Lib Journal</em>, no. 23, 17 Jan. 2014.
+          <a href="https://journal.code4lib.org/articles/9128">https://journal.code4lib.org/articles/9128</a>.
+        </li>
+
+        <li>
+          Suman, S., et al.
+          “<cite>Visualization of Audio Files Using Librosa.</cite>”
+          <em>Proceedings of the 2nd International Conference on Mathematical Modeling and Computational Science</em>,
+          edited by S. L. Peng, C. K. Lin, and S. Pal, vol. 1422, Springer, 2022.
+          <a href="https://doi.org/10.1007/978-981-19-0182-9_41">https://doi.org/10.1007/978-981-19-0182-9_41</a>.
+        </li>
+
+        <li>
+          Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton.
+          “<cite>ImageNet Classification with Deep Convolutional Neural Networks.</cite>”
+          <em>Advances in Neural Information Processing Systems</em>, vol. 25, 2012, pp. 1106–1114.
+        </li>
+
+        <li>
+          He, Kaiming, et al.
+          “<cite>Deep Residual Learning for Image Recognition.</cite>”
+          <em>arXiv</em>, 2015.
+          <a href="https://arxiv.org/abs/1512.03385">https://arxiv.org/abs/1512.03385</a>.
+        </li>
+
+        <li>
+          Cho, Kyunghyun, et al.
+          “<cite>Learning Phrase Representations Using RNN Encoder Decoder for Statistical Machine Translation.</cite>”
+          <em>arXiv</em>, 2014.
+          <a href="https://arxiv.org/abs/1406.1078">https://arxiv.org/abs/1406.1078</a>.
+        </li>
+
+        <li>
+          Schuster, M., and K. K. Paliwal.
+          “<cite>Bidirectional Recurrent Neural Networks.</cite>”
+          <em>IEEE Transactions on Signal Processing</em>, vol. 45, no. 11, 1997, pp. 2673–2681.
+          <a href="https://ieeexplore.ieee.org/document/650093/citations#citations">
+            https://ieeexplore.ieee.org/document/650093/citations#citations
+          </a>.
+        </li>
+
+        <li>
+          Zeng, Zhihong, Maja Pantic, and Glenn Roisman.
+          “<cite>A Survey of Affect Recognition Methods: Audio, Visual, and Spontaneous Expressions.</cite>”
+          <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, vol. 31, 2009, pp. 39–58.
+        </li>
+
+        <li>
+          Malmberg, F.
+          <cite>Gaze Tracking Using Recurrent Neural Networks: Hardware Agnostic Gaze Estimation Using Temporal
+            Features, Synthetic Data, and a Geometric Model.</cite> 2022. Dissertation.
+          <a href="https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-323149">
+            https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-323149
+          </a>.
+        </li>
+
+        <li>
+          Arevalo, John, et al.
+          “<cite>Gated Multimodal Units for Information Fusion.</cite>”
+          <em>arXiv</em>, 2017.
+          <a href="https://arxiv.org/abs/1702.01992">https://arxiv.org/abs/1702.01992</a>.
+        </li>
+
+        <li>
+          Srivastava, Nitish, et al.
+          “<cite>Dropout: A Simple Way to Prevent Neural Networks from Overfitting.</cite>”
+          <em>Journal of Machine Learning Research</em>, vol. 15, no. 56, 2014, pp. 1929–1958.
+          <a href="https://jmlr.org/papers/v15/srivastava14a.html">https://jmlr.org/papers/v15/srivastava14a.html</a>.
+        </li>
+
+        <li>
+          Jung, Y.
+          “<cite>Multiple Predicting K Fold Cross Validation for Model Selection.</cite>”
+          <em>Journal of Nonparametric Statistics</em>, vol. 30, no. 1, 2018, pp. 197–215.
+          <a href="https://doi.org/10.1080/10485252.2017.1404598">https://doi.org/10.1080/10485252.2017.1404598</a>.
+        </li>
+
+        <li>
+          Howard, Jeremy, and Sebastian Ruder.
+          “<cite>Universal Language Model Fine Tuning for Text Classification.</cite>”
+          <em>Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long
+            Papers)</em>,
+          edited by Iryna Gurevych and Yusuke Miyao, Association for Computational Linguistics, 2018, pp. 328–339.
+          Melbourne, Australia.
+          <a href="https://doi.org/10.18653/v1/P18-1031">https://doi.org/10.18653/v1/P18-1031</a>.
+        </li>
+
+        <li>
+          Gururangan, Suchin, et al.
+          “<cite>Do not Stop Pretraining: Adapt Language Models to Domains and Tasks.</cite>”
+          <em>Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics</em>, edited by
+          Dan
+          Jurafsky et al., Association for Computational Linguistics, 2020, pp. 8342–8360. Online.
+          <a href="https://doi.org/10.18653/v1/2020.acl-main.740">
+            https://doi.org/10.18653/v1/2020.acl-main.740
+          </a>.
+        </li>
+
+        <li>
+          Vaswani, Ashish, et al.
+          “<cite>Attention Is All You Need.</cite>”
+          <em>arXiv</em>, 2017.
+          <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>.
+        </li>
+
+        <li>
+          Bengio, Yoshua, Patrice Simard, and Paolo Frasconi.
+          “<cite>Learning Long Term Dependencies with Gradient Descent Is Difficult.</cite>”
+          <em>IEEE Transactions on Neural Networks</em>, vol. 5, no. 2, 1994, pp. 157–166.
+          <a href="https://doi.org/10.1109/72.279181">https://doi.org/10.1109/72.279181</a>.
+        </li>
+
+        <li>
+          Baltrušaitis, T., C. Ahuja, and L. P. Morency.
+          “<cite>Multimodal Machine Learning: A Survey and Taxonomy.</cite>”
+          <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, vol. 41, no. 2, 2019, pp. 423–443.
+          <a href="https://doi.org/10.1109/TPAMI.2018.2798607">https://doi.org/10.1109/TPAMI.2018.2798607</a>.
+        </li>
+
+        <li>
+          Mehrabi, Ninareh, et al.
+          “<cite>A Survey on Bias and Fairness in Machine Learning.</cite>”
+          <em>ACM Computing Surveys</em>, vol. 54, no. 6, 2021, Article 115.
+          <a href="https://doi.org/10.1145/3457607">https://doi.org/10.1145/3457607</a>.
+        </li>
+
+        <li>
+          Tay, Yi, et al.
+          “<cite>Efficient Transformers: A Survey.</cite>”
+          <em>ACM Computing Surveys</em>, vol. 55, no. 6, 2022, Article 109, pp. 1–28.
+          <a href="https://doi.org/10.1145/3530811">https://doi.org/10.1145/3530811</a>.
+        </li>
+      </ol>
     </main>
   </div>
 </body>
+
 </html>
