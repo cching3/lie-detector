@@ -289,18 +289,3 @@ These limitations motivate larger, more diverse datasets and multimodal training
    * More expressive calibration models and uncertainty estimation
 
 ---
-
-## Getting Started
-
-Below is a simple outline of how you might run the code. Adapt paths and names to your repository structure.
-
-```bash
-# Create environment
-conda create -n deception python=3.10
-conda activate deception
-
-# Install core dependencies
-pip install torch torchvision torchaudio
-pip install transformers datasets
-pip install librosa matplotlib scikit-learn
-```
