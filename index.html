@@ -13,9 +13,9 @@
   </script>
   <style>
     :root {
-      --bg: #f3f4f6;
+      --bg: #b19ac5;
       --card-bg: #ffffff;
-      --accent: #2563eb;
+      --accent: #4277aa;
       --accent-soft: #eff6ff;
       --border: #e5e7eb;
       --text: #111827;
@@ -289,7 +289,7 @@
       <h1 id="top">3 Modalities &amp; 1 Lie Detector: Calibrated Deep Learning for Real-World Deception</h1>
       <div class="meta">
         <span><strong>By Charis Ching, Minnie Liang, Renee Hong</strong></span>
-        <span><em>Final project for 6.7960 Deep Learning</em></span>
+        <!-- <span><em>Final project for 6.7960 Deep Learning</em></span> -->
       </div>
 
       <h2 id="introduction">1. Introduction</h2>
@@ -380,12 +380,12 @@
       <h2 id="methods">2. Methods</h2>
 
       <h3 id="data">2.1 Data</h3>
+
       <p>
         To develop a deception detector grounded in high stakes, real world lying behavior, we used a multimodal dataset
         [8] collected from actual court trials. The dataset consists of 121 curated trial video clips (61 deceptive,
         60 truthful), ranging from 20 to 50 seconds in length, featuring a single speaker’s face and high quality audio
-        and
-        visuals. For every clip, we obtained a verbatim transcript of the defendant’s speech, annotated via Amazon
+        and visuals. For every clip, we obtained a verbatim transcript of the defendant’s speech, annotated via Amazon
         Mechanical Turk.
       </p>
       <p>
@@ -395,11 +395,16 @@
         later confessed to, whereas truthful clips include suspects’ statements independently verified by police and
         confirmed testimonies from law enforcement investigations [8].
       </p>
+      <div style="text-align: center;">
+        <img src="images/dl_video.gif" alt="" style="max-width: 100%; height: auto;">
+      </div>
+      <p style="text-align: center;">
+        <i>
+        Figure 1: Sample video from courtroom trial videos in dataset.
+        </i>
+      </p>
 
       <h3 id="architectures">2.2 Architectures</h3>
-      <p>
-        Figure 1: Architectural diagrams for the three modality specific models: visual, transcription, and audio.
-      </p>
       <p>
         We model three modalities separately: video, text (transcripts), and audio. Then, we built multimodal
         architectures
@@ -408,6 +413,14 @@
       </p>
 
       <h3 id="transcriptions">2.2.1 Transcriptions</h3>
+      <img src="images/text-model.png" alt="" style="max-width: 100%; height: auto;">
+
+      <p style="text-align: center;">
+        <i>
+        Figure 2: Architectural diagrams for the transcription specific model.
+        </i>
+      </p>
+
       <p><strong>Transcription Preprocessing</strong></p>
       <p>
         We use the pretrained RoBERTa tokenizer [13] to convert each transcript directly into subword tokens, truncating
@@ -440,6 +453,14 @@
       </p>
 
       <h3 id="audio">2.2.2 Audio</h3>
+      <img src="images/audio-model.png" alt="" style="max-width: 100%; height: auto;">
+
+      <p style="text-align: center;"></p>
+        <i>
+        Figure 3: Architectural diagrams for the audio specific model.
+        </i>
+      </p>
+
       <p><strong>Audio Preprocessing</strong></p>
       <p>
         To model deception related cues in vocal patterns, we built audio classifiers that operate on the mel
@@ -481,6 +502,13 @@
       </p>
 
       <h3 id="video">2.2.3 Video</h3>
+      <img src="images/video-model.png" alt="" style="max-width: 100%; height: auto;">
+      <p style="text-align: center;">
+        <i>
+        Figure 4: Architectural diagrams for the video specific model.
+        </i>
+      </p>
+
       <p><strong>Video Preprocessing</strong></p>
       <p>
         For the video modality, we uniformly sampled 20 frames from each clip and resized them to 224 × 224 pixels.
@@ -524,10 +552,15 @@
       </p>
 
       <h3 id="video-audio-transcription">2.2.4 Video, Audio, and Transcription</h3>
-      <p>
-        Figure 2: Architectural diagram of the multimodal fusion model which integrates embeddings from the three
+      <img src="images/trimodal-model.png" alt="" style="max-width: 100%; height: auto;">
+      <p style="text-align: center;">
+      
+        <i>
+        Figure 5: Architectural diagram of the multimodal fusion model which integrates embeddings from the three
         separately trained encoders.
+        </i>
       </p>
+
       <p>
         To leverage information from audios, transcriptions, and videos, we developed a multimodal fusion model that
         integrates features from all three separately trained encoders. Rather than simply concatenating unimodal logits
@@ -559,11 +592,15 @@
       </p>
 
       <h3 id="video-transcription">2.2.5 Video and Transcription</h3>
-      <p>
-        Figure 3: Architectural diagram of the bimodal model which integrates embeddings from the video and
+      <img src="images/multimodal-model.png" alt="" style="max-width: 100%; height: auto;">
+      <p style="text-align: center;">
+        <i>
+        Figure 6: Architectural diagram of the bimodal model which integrates embeddings from the video and
         transcription
         encoders.
+        </i>
       </p>
+
       <p>
         Finally, guided by the results of previous models, we also created a bimodal model using video and text
         transcription modalities. Here, we combined the best performing video architecture with the best performing text
@@ -600,7 +637,6 @@
           top: 50%;
           transform: translateY(-50%);
         ">
-          [2]
         </span>
 
         $$
@@ -745,12 +781,17 @@
         score, with temperature scaling dropping the ECE to 0.1096 and Platt scaling dropping it to 0.1136. The bimodal
         model also achieved a slightly higher AUC of 0.853, despite having lower accuracy.
       </p>
-      <p>
-        Figure 4: Reliability plots for the video model (top row) and the bimodal video transcription model (bottom
+      <img src="images/ece-video-transformer.png" alt="" style="max-width: 100%; height: auto;">
+      <img src="images/ece-text-video.png" alt="" style="max-width: 100%; height: auto;">
+      <p style="text-align: center;">
+        <i>
+        Figure 7: Reliability plots for the video model (top row) and the bimodal video transcription model (bottom
         row).
         Each row shows the uncalibrated model, temperature scaled model, and Platt scaled model, along with the
         corresponding ECE.
+        </i>
       </p>
+
 
       <table>
         <caption>Table 2. Performance comparison of the Video Transformer model and the combined Transcription plus
@@ -801,10 +842,15 @@
         masked
         by false confidence.
       </p>
-      <p>
-        Figure 5: Histograms of predicted confidences for the Video Transformer model and the combined Transcription
-        plus
-        Video model.
+      <div style="display: flex; gap: 10px;">
+        <img src="images/histogram-video-transformer.png" alt="" style="width: 50%; height: auto;">
+        <img src="images/histogram-text-video.png" alt="" style="width: 50%; height: auto;">
+      </div>
+      <p style="text-align: center;">
+        <i>
+        Figure 8: Histograms of predicted confidences for the Video Transformer (left) model and the combined Transcription
+        plus Video (right) model.
+        </i>
       </p>
 
       <h2 id="discussion">4. Discussion</h2>
@@ -911,7 +957,17 @@
         in real world decision making contexts.
       </p>
 
-      <h2 id="references">5. References</h2>
+      <h2 id="acknowledgedgments">Acknowledgments</h2>
+      <p>
+        We would like to thank Professors Sara Beery, Kaiming He, and Omar Khattab for an incredible 6.7960 experience. We 
+        really appreciated the enthusiasm all three brought to teaching, as well as their own unique teaching styles, whether 
+        that meant precise laser-pointer aim or sharing funny deep learning failures! We also extend a huge thank-you to the 6.7960 
+        teaching staff for tirelessly running office hours (some of those queues got quite long!) Given the sheer size of the class, 
+        we especially appreciate the timely feedback on grading and Piazza posts. Lastly, thank you to TeaDo for fueling us, especially the 
+        gyudon, salmon and spam onigiri, and 50% sugar, no ice, Thai tea boba. 
+      </p>
+
+      <h2 id="references">References</h2>
       <ol class="references">
         <li>
           Zhang, Xiuliang, et al.
